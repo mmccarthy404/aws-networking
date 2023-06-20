@@ -4,5 +4,6 @@ local = {
 }
 
 vpc = {
-  cidr = "10.0.0.0/16"
+  name_suffix = "default"
+  cidr        = "10.0.0.0/16"
 }
