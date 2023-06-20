@@ -7,7 +7,6 @@ variable "local" {
 
 variable "vpc" {
   type = object({
-    name_suffix = string
-    cidr        = string
+    cidr = string
   })
 }

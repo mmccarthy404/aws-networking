@@ -22,8 +22,7 @@ module "vpc" {
   name = join("-", [
     "vpc",
     var.local.region,
-    var.local.env,
-    var.vpc.name_suffix
+    var.local.env
   ])
 
   cidr            = var.vpc.cidr
