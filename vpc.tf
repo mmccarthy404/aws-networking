@@ -1,18 +1,34 @@
+locals {
+  az_count = 3
+}
+
 resource "aws_eip" "nat" {
-  count = 3
-  vpc   = true
+  count  = local.az_count
+  domain = "vpc"
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
+data "aws_availability_zones" "available" {
+  state = "available"
 }
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.0.0"
 
-  name = "my-vpc"
-  cidr = "10.0.0.0/16"
+  name = join("-", [
+    "vpc",
+    var.local.region,
+    var.local.env
+  ])
 
-  azs             = ["us-east-1a", "us-east-1b", "us-east-1c"]
-  private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+  cidr            = var.vpc.cidr
+  azs             = slice(data.aws_availability_zones.available.names, 0, local.az_count)
+  private_subnets = [for i in range(local.az_count) : cidrsubnet(var.vpc_cidr, 8, i)]
+  public_subnets  = [for i in range(local.az_count, local.az_count * 2) : cidrsubnet(var.vpc_cidr, 8, i)]
 
   enable_nat_gateway  = true
   single_nat_gateway  = false

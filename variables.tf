@@ -4,3 +4,9 @@ variable "local" {
     region = string
   })
 }
+
+varvariable "vpc" {
+  type = object({
+    cidr = string
+  })
+}
