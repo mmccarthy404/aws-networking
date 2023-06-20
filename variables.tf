@@ -5,7 +5,7 @@ variable "local" {
   })
 }
 
-varvariable "vpc" {
+variable "vpc" {
   type = object({
     cidr = string
   })
