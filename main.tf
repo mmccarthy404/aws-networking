@@ -18,8 +18,8 @@ module "vpc" {
 
   cidr            = var.vpc_cidr
   azs             = slice(data.aws_availability_zones.available.names, 0, var.az_count)
-  private_subnets = [for i in range(var.az_count) : cidrsubnet(var.vpc.cidr, 6, i)]
-  public_subnets  = [for i in range(var.az_count, var.az_count * 2) : cidrsubnet(var.vpc.cidr, 6, i)]
+  private_subnets = [for i in range(var.az_count) : cidrsubnet(var.vpc_cidr, 6, i)]
+  public_subnets  = [for i in range(var.az_count, var.az_count * 2) : cidrsubnet(var.vpc_cidr, 6, i)]
 
   map_public_ip_on_launch = true
 
