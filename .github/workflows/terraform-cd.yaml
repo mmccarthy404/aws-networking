@@ -4,13 +4,32 @@ on:
   push:
     branches:
       - main
+    paths:
+      - terraform/**
 
 permissions:
   id-token: write
   contents: read
 
 jobs:
+  security:
+    uses: mmccarthy404/reusable-workflows/.github/workflows/scanning.yaml@main
+    secrets: inherit
+
+  terraform-ci:
+    needs: security
+    uses: mmccarthy404/reusable-workflows/.github/workflows/terraform-ci.yaml@main
+    secrets: inherit
+    with:
+      terraform-version: 1.5.0
+      terraform-directory: .
+      terraform-var-file: terraform.tfvars
+      terraform-backend-config: backend.tfvars
+      aws-region: us-east-1
+      aws-role: arn:aws:iam::004351562122:role/github-oidc-aws-core-infra
+      
   terraform-cd:
+    needs: terraform-ci
     uses: mmccarthy404/reusable-workflows/.github/workflows/terraform-cd.yaml@main
     secrets: inherit
     with:
