@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   terraform-ci:
-    uses: mmccarthy404/reusable-workflows/.github/workflows/terraform-ci.yaml@main
+    uses: mmccarthy404/reusable-workflows/.github/workflows/terraform-ci.yaml@v2.0.0
     secrets: inherit
     with:
       terraform-version: 1.5.0

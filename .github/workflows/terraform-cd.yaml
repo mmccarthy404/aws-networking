@@ -11,7 +11,7 @@ permissions:
 
 jobs: 
   terraform-cd:
-    uses: mmccarthy404/reusable-workflows/.github/workflows/terraform-cd.yaml@main
+    uses: mmccarthy404/reusable-workflows/.github/workflows/terraform-cd.yaml@v2.0.0
     secrets: inherit
     with:
       terraform-version: 1.5.0
