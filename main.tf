@@ -11,7 +11,7 @@ data "aws_availability_zones" "available" {
 }
 
 module "vpc" {
-  source = "https://github.com/terraform-aws-modules/terraform-aws-vpc?ref=v5.2.0" # v5.2.0
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc?ref=v5.2.0"
 
   name = local.name_prefix
 
@@ -26,7 +26,7 @@ module "vpc" {
 }
 
 module "nat" {
-  source        = "https://github.com/mmccarthy404/terraform-modules//terraform-aws-nat-instance?ref=v1.0.0"
+  source        = "git::https://github.com/mmccarthy404/terraform-modules//terraform-aws-nat-instance?ref=v1.0.0"
   instance_type = "t4g.nano"
   name_prefix   = "${local.name_prefix}-nat"
   vpc_id        = module.vpc.vpc_id
