@@ -13,7 +13,8 @@ permissions:
 
 jobs:
   terraform-ci:
-    uses: mmccarthy404/reusable-workflows/.github/workflows/terraform-ci.yaml@v1.0.0
+    uses: mmccarthy404/reusable-workflows/.github/workflows/terraform-ci.yaml@main
+    secrets: inherit
     with:
       terraform-version: 1.5.0
       terraform-directory: .
@@ -21,5 +22,3 @@ jobs:
       terraform-backend-config: backend.tfvars
       aws-region: us-east-1
       aws-role: arn:aws:iam::004351562122:role/github-oidc-aws-core-infra
-    secrets:
-      token: ${{ secrets.GITHUB_TOKEN }}
