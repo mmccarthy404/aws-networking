@@ -1,9 +1,9 @@
 name: terraform-ci
 
 on:
-  push:
-    paths:
-      - terraform/**
+  pull_request:
+    branches:
+      - main
 
 permissions:
   id-token: write
@@ -12,12 +12,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  security:
-    uses: mmccarthy404/reusable-workflows/.github/workflows/scanning.yaml@main
-    secrets: inherit
-
   terraform-ci:
-    needs: security
     uses: mmccarthy404/reusable-workflows/.github/workflows/terraform-ci.yaml@main
     secrets: inherit
     with:
