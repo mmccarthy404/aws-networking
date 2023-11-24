@@ -11,7 +11,7 @@ data "aws_availability_zones" "available" {
 }
 
 module "vpc" {
-  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=c467edb180c38f493b0e9c6fdc22998a97dfde89" # commit hash of version 5.2.0
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=c467edb180c38f493b0e9c6fdc22998a97dfde89" # v5.2.0
 
   name = local.name_prefix
 
@@ -23,4 +23,22 @@ module "vpc" {
   map_public_ip_on_launch = true
 
   tags = var.tags
+}
+
+module "nat" {
+  source        = "git::https://github.com/mmccarthy404/terraform-modules/terraform-aws-nat-instance.git?ref=v1.0.0"
+  instance_type = "t4g.nano"
+  name_prefix   = "${local.name_prefix}-nat"
+  vpc_id        = module.vpc.vpc_id
+  subnet_id     = module.vpc.public_subnets[0]
+
+  tags = var.tags
+}
+
+resource "aws_route" "nat" {
+  for_each = module.vpc.private_route_table_ids
+
+  route_table_id         = each.value
+  destination_cidr_block = "0.0.0.0/0"
+  network_interface_id   = module.nat.this.aws_network_interface.id
 }
