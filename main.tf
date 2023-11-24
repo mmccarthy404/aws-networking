@@ -11,7 +11,7 @@ data "aws_availability_zones" "available" {
 }
 
 module "vpc" {
-  source  = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=c467edb180c38f493b0e9c6fdc22998a97dfde89" # commit hash of version 5.2.0
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=c467edb180c38f493b0e9c6fdc22998a97dfde89" # commit hash of version 5.2.0
 
   name = local.name_prefix
 
