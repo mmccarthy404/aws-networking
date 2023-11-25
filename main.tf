@@ -36,7 +36,7 @@ module "nat" {
 }
 
 resource "aws_route" "nat" {
-  for_each = module.vpc.private_route_table_ids
+  for_each = toset(module.vpc.private_route_table_ids)
 
   route_table_id         = each.value
   destination_cidr_block = "0.0.0.0/0"
