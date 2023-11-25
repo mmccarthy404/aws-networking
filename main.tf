@@ -26,7 +26,7 @@ module "vpc" {
 }
 
 module "nat" {
-  source        = "git::https://github.com/mmccarthy404/terraform-modules//terraform-aws-nat-instance?ref=aa7fc04491eeaa095cf58e3cc4471a73894d957f" #v1.0.1
+  source        = "git::https://github.com/mmccarthy404/terraform-modules//terraform-aws-nat-instance?ref=56c79ebe3242500c73c3bab405334e7e7748f1fc" #v1.0.2
   instance_type = "t4g.nano"
   name_prefix   = "${local.name_prefix}-nat"
   vpc_id        = module.vpc.vpc_id
