@@ -26,10 +26,9 @@ module "vpc" {
 }
 
 module "nat" {
-  source        = "git::https://github.com/mmccarthy404/terraform-modules//terraform-aws-nat-instance?ref=318b48ef0ffc7bf314f5a63f7ff646d7c5ce7ad4" #v1.0.3
+  source        = "git::https://github.com/mmccarthy404/terraform-modules//terraform-aws-nat-instance?ref=1c5b43178fe2bb67a7de2f9401a75690a44d938d" #v1.1.1
   instance_type = "t4g.nano"
-  name_prefix   = "${local.name_prefix}-nat"
-  vpc_id        = module.vpc.vpc_id
+  name          = "${local.name_prefix}-nat"
   subnet_id     = module.vpc.public_subnets[0]
 
   tags = var.tags
@@ -40,5 +39,5 @@ resource "aws_route" "nat" {
 
   route_table_id         = each.value
   destination_cidr_block = "0.0.0.0/0"
-  network_interface_id   = module.nat.this.aws_network_interface.id
+  network_interface_id   = module.nat.network_interface.id
 }
