@@ -1,3 +1,3 @@
-# aws-core-infra
+# aws-networking
 
-Core infrastructure for AWS; VPC resources.
+AWS networking infrastructure
