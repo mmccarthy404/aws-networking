@@ -6,6 +6,6 @@ az_count    = 3
 
 tags = {
   terraform   = "true"
-  project     = "aws-core-infra"
+  project     = "aws-networking"
   environment = "prd"
 }

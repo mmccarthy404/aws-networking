@@ -19,4 +19,4 @@ jobs:
       terraform-var-file: terraform.tfvars
       terraform-backend-config: backend.tfvars
       aws-region: us-east-1
-      aws-role: arn:aws:iam::004351562122:role/github-oidc-aws-core-infra
+      aws-role: arn:aws:iam::004351562122:role/github-oidc-aws-networking
