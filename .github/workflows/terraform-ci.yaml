@@ -1,4 +1,4 @@
-worname: terraform-ci
+name: terraform-ci
 
 on:
   pull_request:
