@@ -45,25 +45,19 @@ resource "aws_route" "nat" {
 }
 
 # Create Wireguard interface VPN enabling access to private subnets from peered interfaces
-# Manually created in SSM Paramater Store as SecureString in JSON format like:
-# [
-#   {
-#     "public_key": "<public-key-1>",
-#     "allowed_ips": ["<allowed-ips-1>"]
-#   },
-#   {
-#     "public_key": "<public-key-2>",
-#     "allowed_ips": ["<allowed-ips-2>"]
-#   }
-# ]
-data "aws_ssm_parameter" "wireguard_interface_peers" {
-  name = "/prd/aws-networking/wireguard-interface-peers"
-}
-
-# Manually created in SSM Paramater Store as SecureString like:
-# <private-key>
+# Manually created in SSM Paramater Store as SecureString
 data "aws_ssm_parameter" "wireguard_interface_private_key" {
   name = "/prd/aws-networking/wireguard-interface-private-key"
+}
+
+# Manually created in SSM Paramater Store as SecureString
+data "aws_ssm_parameter" "wireguard_peer_public_key" {
+  name = "/prd/aws-networking/wireguard-peer-public-key"
+}
+
+# Manually created in SSM Paramater Store as SecureString
+data "aws_ssm_parameter" "wireguard_peer_allowed_ip" {
+  name = "/prd/aws-networking/wireguard-peer-allowed-ip"
 }
 
 resource "aws_eip" "wireguard" {
@@ -74,15 +68,16 @@ resource "aws_eip" "wireguard" {
 }
 
 module "wireguard" {
-  source        = "git::https://github.com/mmccarthy404/terraform-modules//terraform-aws-wireguard?ref=b16cf48db8d2998af90977639cbb12f04767d890" #v2.0.0
+  source        = "git::https://github.com/mmccarthy404/terraform-modules//terraform-aws-wireguard?ref=cd8aabf5652a2752f47c1cd29490ad5ee9eaae43" #v2.0.0
   instance_type = "t4g.nano"
   name          = "${local.name_prefix}-wireguard"
   subnet_id     = module.vpc.public_subnets[0]
 
   elastic_ip = aws_eip.wireguard.id
 
-  wireguard_interface_peers       = jsondecode(data.aws_ssm_parameter.wireguard_interface_peers.value)
   wireguard_interface_private_key = data.aws_ssm_parameter.wireguard_interface_private_key.value
+  wireguard_peer_public_key       = data.aws_ssm_parameter.wireguard_peer_public_key.value
+  wireguard_peer_allowed_ip       = data.aws_ssm_parameter.wireguard_peer_allowed_ip.value
 
   tags = var.tags
 }
