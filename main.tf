@@ -73,7 +73,7 @@ resource "aws_eip" "wireguard" {
 }
 
 module "wireguard" {
-  source        = "git::https://github.com/mmccarthy404/terraform-modules//terraform-aws-wireguard?ref=9ae7c01c610718c8ce7a0ed0fa5c6ee2d1b00f88" #v2.0.0
+  source        = "git::https://github.com/mmccarthy404/terraform-modules//terraform-aws-wireguard?ref=539d9f53dac3a67d0f7a8d014e449feceba2f325" #v2.0.0
   instance_type = "t4g.nano"
   name          = "${local.name_prefix}-wireguard"
   subnet_id     = module.vpc.public_subnets[0]
