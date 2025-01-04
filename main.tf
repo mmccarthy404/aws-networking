@@ -44,31 +44,31 @@ resource "aws_route" "nat" {
   network_interface_id   = module.nat.network_interface.id
 }
 
-# Create Wireguard interface VPN enabling access to private subnets from peered interfaces
-# Manually created in SSM Paramater Store as SecureString
+# Create WireGuard interface VPN enabling access to private subnets from peered interfaces
+# Manually created in SSM Parameter Store as SecureString
 data "aws_ssm_parameter" "wireguard_interface_private_key" {
   name = "/prd/aws-networking/wireguard-interface-private-key"
 }
 
-# Manually created in SSM Paramater Store as SecureString
+# Manually created in SSM Parameter Store as SecureString
 data "aws_ssm_parameter" "wireguard_peer_public_key" {
   name = "/prd/aws-networking/wireguard-peer-public-key"
 }
 
-# Manually created in SSM Paramater Store as SecureString
+# Manually created in SSM Parameter Store as SecureString
 data "aws_ssm_parameter" "wireguard_peer_allowed_ip" {
   name = "/prd/aws-networking/wireguard-peer-allowed-ip"
 }
 
 resource "aws_eip" "wireguard" {
-  #checkov:skip=CKV2_AWS_19:EIP provisioned outside Wireguard module to separate lifecycles, attachment to ENI made within module
+  #checkov:skip=CKV2_AWS_19:EIP provisioned outside WireGuard module to separate life cycles, attachment to ENI made within module
   domain = "vpc"
 
   tags = var.tags
 }
 
 module "wireguard" {
-  source        = "git::https://github.com/mmccarthy404/terraform-modules//terraform-aws-wireguard?ref=cd8aabf5652a2752f47c1cd29490ad5ee9eaae43" #v2.0.0
+  source        = "git::https://github.com/mmccarthy404/terraform-modules//terraform-aws-wireguard?ref=9b193524f2c5ab88f5c792698d68b73115ac1b86" #v2.1.0
   instance_type = "t4g.nano"
   name          = "${local.name_prefix}-wireguard"
   subnet_id     = module.vpc.public_subnets[0]
