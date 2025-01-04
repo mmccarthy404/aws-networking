@@ -10,6 +10,7 @@ data "aws_availability_zones" "available" {
   state = "available"
 }
 
+# Create VPC and related infrastructure
 module "vpc" {
   source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc?ref=c467edb180c38f493b0e9c6fdc22998a97dfde89" #v5.2.0
 
@@ -25,6 +26,7 @@ module "vpc" {
   tags = var.tags
 }
 
+# Create NAT instance and create appropriate routes in private route tables
 module "nat" {
   source        = "git::https://github.com/mmccarthy404/terraform-modules//terraform-aws-nat-instance?ref=1d9eb79583ecf325ee3df7f22796ba0b156b8abc" #v1.1.3
   instance_type = "t4g.nano"
@@ -40,4 +42,46 @@ resource "aws_route" "nat" {
   route_table_id         = each.value
   destination_cidr_block = "0.0.0.0/0"
   network_interface_id   = module.nat.network_interface.id
+}
+
+# Create Wireguard interface VPN enabling access to private subnets from peered interfaces
+# Manually created in SSM Paramater Store as SecureString in JSON format like:
+# [
+#   {
+#     "public_key": "<public-key-1>",
+#     "allowed_ips": ["<allowed-ips-1>"]
+#   },
+#   {
+#     "public_key": "<public-key-2>",
+#     "allowed_ips": ["<allowed-ips-2>"]
+#   }
+# ]
+data "aws_ssm_parameter" "wireguard_interface_peers" {
+  name = "/prd/aws-networking/wireguard-interface-peers"
+}
+
+# Manually created in SSM Paramater Store as SecureString like:
+# <private-key>
+data "aws_ssm_parameter" "wireguard_interface_private_key" {
+  name = "/prd/aws-networking/wireguard-interface-private-key"
+}
+
+resource "aws_eip" "wireguard" {
+  vpc = true
+
+  tags = var.tags
+}
+
+module "wireguard" {
+  source        = "git::https://github.com/mmccarthy404/terraform-modules//terraform-aws-wireguard?ref=49c84b456f420265cf051db5b166763c3b1d8a91" #v2.0.0
+  instance_type = "t4g.nano"
+  name          = "${local.name_prefix}-wireguard"
+  subnet_id     = module.vpc.public_subnets[0]
+
+  elastic_ip = aws_eip.wireguard.id
+
+  wireguard_interface_peers       = jsondecode(data.aws_ssm_parameter.wireguard_interface_peers.value)
+  wireguard_interface_private_key = data.wireguard_interface_private_key.value
+
+  tags = var.tags
 }
