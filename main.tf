@@ -67,7 +67,7 @@ data "aws_ssm_parameter" "wireguard_interface_private_key" {
 }
 
 resource "aws_eip" "wireguard" {
-  vpc = true
+  domain = "vpc"
 
   tags = var.tags
 }
