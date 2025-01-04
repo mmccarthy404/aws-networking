@@ -67,6 +67,7 @@ data "aws_ssm_parameter" "wireguard_interface_private_key" {
 }
 
 resource "aws_eip" "wireguard" {
+  #checkov:skip=CKV2_AWS_19:EIP provisioned outside Wireguard module to separate lifecycles, attachment to ENI made within module
   domain = "vpc"
 
   tags = var.tags
