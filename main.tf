@@ -73,7 +73,7 @@ resource "aws_eip" "wireguard" {
 }
 
 module "wireguard" {
-  source        = "git::https://github.com/mmccarthy404/terraform-modules//terraform-aws-wireguard?ref=49c84b456f420265cf051db5b166763c3b1d8a91" #v2.0.0
+  source        = "git::https://github.com/mmccarthy404/terraform-modules//terraform-aws-wireguard?ref=9ae7c01c610718c8ce7a0ed0fa5c6ee2d1b00f88" #v2.0.0
   instance_type = "t4g.nano"
   name          = "${local.name_prefix}-wireguard"
   subnet_id     = module.vpc.public_subnets[0]
@@ -81,7 +81,7 @@ module "wireguard" {
   elastic_ip = aws_eip.wireguard.id
 
   wireguard_interface_peers       = jsondecode(data.aws_ssm_parameter.wireguard_interface_peers.value)
-  wireguard_interface_private_key = data.wireguard_interface_private_key.value
+  wireguard_interface_private_key = data.aws_ssm_parameter.wireguard_interface_private_key.value
 
   tags = var.tags
 }
