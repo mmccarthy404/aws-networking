@@ -28,7 +28,7 @@ module "vpc" {
 
 # Create NAT instance and create appropriate routes in private route tables
 module "nat" {
-  source        = "git::https://github.com/mmccarthy404/terraform-modules//terraform-aws-nat-instance?ref=672ef55363e0bc5194776eba3f92366542570d6f" #v1.1.3
+  source        = "git::https://github.com/mmccarthy404/terraform-modules//terraform-aws-nat-instance?ref=d6f5e426d617778ec41e7ff63e427478541e0dda" #v2.2.1
   instance_type = "t4g.nano"
   name          = "${local.name_prefix}-nat"
   subnet_id     = module.vpc.public_subnets[0]
