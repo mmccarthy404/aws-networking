@@ -28,7 +28,7 @@ module "vpc" {
 
 # Create NAT instance and create appropriate routes in private route tables
 module "nat" {
-  source        = "git::https://github.com/mmccarthy404/terraform-modules//terraform-aws-nat-instance?ref=1d9eb79583ecf325ee3df7f22796ba0b156b8abc" #v1.1.3
+  source        = "git::https://github.com/mmccarthy404/terraform-modules//terraform-aws-nat-instance?ref=672ef55363e0bc5194776eba3f92366542570d6f" #v1.1.3
   instance_type = "t4g.nano"
   name          = "${local.name_prefix}-nat"
   subnet_id     = module.vpc.public_subnets[0]
@@ -56,8 +56,8 @@ data "aws_ssm_parameter" "wireguard_peer_public_key" {
 }
 
 # Manually created in SSM Parameter Store as SecureString
-data "aws_ssm_parameter" "wireguard_peer_allowed_ip" {
-  name = "/prd/aws-networking/wireguard-peer-allowed-ip"
+data "aws_ssm_parameter" "wireguard_peer_source_ip" {
+  name = "/prd/aws-networking/wireguard-peer-source-ip"
 }
 
 resource "aws_eip" "wireguard" {
@@ -77,7 +77,7 @@ module "wireguard" {
 
   wireguard_interface_private_key = data.aws_ssm_parameter.wireguard_interface_private_key.value
   wireguard_peer_public_key       = data.aws_ssm_parameter.wireguard_peer_public_key.value
-  wireguard_peer_allowed_ip       = data.aws_ssm_parameter.wireguard_peer_allowed_ip.value
+  wireguard_peer_source_ip        = data.aws_ssm_parameter.wireguard_peer_source_ip.value
 
   tags = var.tags
 }
