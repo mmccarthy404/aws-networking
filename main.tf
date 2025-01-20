@@ -81,3 +81,11 @@ module "wireguard" {
 
   tags = var.tags
 }
+
+resource "aws_route" "wireguard" {
+  for_each = toset(module.vpc.private_route_table_ids)
+
+  route_table_id         = each.value
+  destination_cidr_block = module.wireguard.wireguard_interface_address
+  network_interface_id   = module.wireguard.network_interface.id
+}
