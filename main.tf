@@ -68,7 +68,7 @@ resource "aws_eip" "wireguard" {
 }
 
 module "wireguard" {
-  source        = "git::https://github.com/mmccarthy404/terraform-modules//terraform-aws-wireguard?ref=64efce55950b324a9f176deab371e9a34c1522a8" #v2.2.2
+  source        = "git::https://github.com/mmccarthy404/terraform-modules//terraform-aws-wireguard?ref=a7eb9b1456adc52288ef3502359da0810023c0b5" #v2.2.3
   instance_type = "t4g.nano"
   name          = "${local.name_prefix}-wireguard"
   subnet_id     = module.vpc.public_subnets[0]
@@ -86,6 +86,6 @@ resource "aws_route" "wireguard" {
   for_each = toset(module.vpc.private_route_table_ids)
 
   route_table_id         = each.value
-  destination_cidr_block = module.wireguard.wireguard_interface_address
+  destination_cidr_block = module.wireguard.wireguard_cidr
   network_interface_id   = module.wireguard.network_interface.id
 }
