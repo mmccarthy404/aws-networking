@@ -9,5 +9,5 @@ permissions:
 
 jobs:
   security:
-    uses: mmccarthy404/reusable-workflows/.github/workflows/scanning.yaml@v2.0.0
+    uses: michaelmccarthydev/reusable-workflows/.github/workflows/scanning.yaml@v2.0.0
     secrets: inherit
