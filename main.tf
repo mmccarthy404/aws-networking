@@ -28,7 +28,7 @@ module "vpc" {
 
 # Create NAT instance and create appropriate routes in private route tables
 module "nat" {
-  source        = "git::https://github.com/michaelmccarthydev/terraform-modules//terraform-aws-nat-instance?ref=d6f5e426d617778ec41e7ff63e427478541e0dda" #v2.2.1
+  source        = "git::https://github.com/mmccarthy404/terraform-modules//terraform-aws-nat-instance?ref=d6f5e426d617778ec41e7ff63e427478541e0dda" #v2.2.1
   instance_type = "t4g.nano"
   name          = "${local.name_prefix}-nat"
   subnet_id     = module.vpc.public_subnets[0]
@@ -68,7 +68,7 @@ resource "aws_eip" "wireguard" {
 }
 
 module "wireguard" {
-  source        = "git::https://github.com/michaelmccarthydev/terraform-modules//terraform-aws-wireguard?ref=7262f775270c0e0f8499b5ae51dba30da41d7cca" #v2.2.4
+  source        = "git::https://github.com/mmccarthy404/terraform-modules//terraform-aws-wireguard?ref=7262f775270c0e0f8499b5ae51dba30da41d7cca" #v2.2.4
   instance_type = "t4g.nano"
   name          = "${local.name_prefix}-wireguard"
   subnet_id     = module.vpc.public_subnets[0]
